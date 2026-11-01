@@ -1,30 +1,27 @@
-# Worker task contract — ply-erp-builder-2
+# Worker task contract — Inventory & stock
 
 ## Objective
-Inventory & stock.
+Deliver a self-contained, executable inventory domain module in this public Builder repository. This repository is an active development workspace, not a test-only lane.
 
-## Source of truth
-- Product source of truth: private `bhagyamehta1-lab/PLY_ERP`.
-- Work must be pinned to one explicit private source commit SHA before any source-level test is reported.
-- Never copy private source, customer/factory data, credentials, tokens, database files or confidential reports into this public repository.
-- No private-source credential is configured by this contract. Until a safe, minimum-permission GitHub App or equivalent is approved and configured outside public workflow code, mark private-source verification as **blocked**.
+## Scope
+- Append-only stock movement ledger and ledger-derived balances.
+- Item, location and optional lot identity.
+- Reservation-aware availability calculation.
+- Transfers represented by balanced outbound/inbound events.
+- Explicit negative-stock policy.
+- Deterministic quantities represented as safe integer smallest-units.
 
-## Scope and acceptance
-Test stock ledger, available/reserved quantities, transfers, adjustments and negative-stock policy against private-source implementation.
-- Tests must import or execute the actual private-source implementation at the pinned SHA; copied business-rule tests alone are not acceptance evidence.
-- Record unit, integration, migration and relevant end-to-end results separately.
-- A module is not complete until its end-to-end workflow, permissions, audit trail, reports and business-owner acceptance pass.
+## Public-repository safety
+- Use only generic, synthetic examples and public interface contracts.
+- Never access, fetch, inspect, or depend on the private PLY_ERP repository.
+- Never add proprietary source, confidential business rules, live factory/customer/supplier data, credentials, tokens, database files, encryption keys, or unredacted logs.
+- No cloud sync, telemetry, or external data upload.
 
 ## Required task result
-Every task result must include:
-- task_id, worker_repo, module, private_source_sha (or null while blocked)
-- changed_files, commit_sha, test_commands, test_results
-- acceptance_total, acceptance_passed, acceptance_failed, acceptance_not_tested
-- blockers, risks, rollback_note, evidence_links, updated_at
-- status: Not started / In progress / Blocked / In review / Passed / Merged / Accepted
+Every task result must include task_id, worker_repo, module, base_sha, changed_files, commit_sha, test_commands, test_results, acceptance_total, acceptance_passed, acceptance_failed, acceptance_not_tested, blockers, risks, rollback_note, evidence_links, updated_at and status.
 
-## Safety and integration
-- Public repository contains only sanitized code, contracts and non-sensitive status.
-- One coherent feature per private integration PR; never push directly to production/main.
-- No private PR, merge, production data change, credential rotation or release without owner approval.
-- Offline data model: each device has its own local database. Device transfer is explicit encrypted backup export/import; no cloud or automatic sync.
+## Integration boundary
+- Export stable, documented module APIs and deterministic contract tests.
+- Windows and Android clients must be able to consume the same domain contract.
+- Do not claim production readiness from isolated domain tests.
+- Factory workflow and accounting acceptance require the respective human approvers.
