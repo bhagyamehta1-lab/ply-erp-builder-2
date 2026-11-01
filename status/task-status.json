@@ -11,7 +11,7 @@
     "docs/PARALLEL_WORKSTREAM.md",
     "status/task-status.json"
   ],
-  "commit_sha": "pending-final-documentation-commit",
+  "commit_sha": "will be recorded in final handover after PR head is verified",
   "test_commands": [
     "node --test src/*.test.mjs"
   ],
@@ -34,5 +34,11 @@
   ],
   "rollback_note": "Revert the feature PR; no database or production data was changed.",
   "evidence_links": [],
-  "updated_at": "2026-11-02"
+  "updated_at": "2026-11-02",
+  "acceptance": {
+    "total": 10,
+    "passed": 0,
+    "failed": 0,
+    "not_tested": 10
+  }
 }
