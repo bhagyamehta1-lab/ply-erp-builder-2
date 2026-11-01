@@ -27,7 +27,7 @@ function validateEvent(event) {
     assertNonEmpty(event[field], field);
   }
   assertPositiveQuantity(event.quantity);
-  if (!(event.movement in MOVEMENT_SIGN)) {
+  if (!Object.hasOwn(MOVEMENT_SIGN, event.movement)) {
     throw new Error('Unsupported stock movement');
   }
   if (Number.isNaN(Date.parse(event.occurredAt))) {
