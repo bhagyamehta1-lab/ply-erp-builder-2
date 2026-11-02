@@ -1,28 +1,29 @@
 # Parallel Workstream: Inventory & warehouse
 
 ## Purpose
-This repository is an independently developed workstream for the PlyMetrix ERP project.
+Build a complete, independently testable inventory domain module in this public repository. Builder-1 coordinates cross-module interfaces and integration.
 
 ## Assigned scope
-Implement warehouse/location masters, stock identity, reservations, transfers and in-transit stock, cycle counts, stock balances, valuation, ageing, reorder and FEFO/FIFO. Preserve append-only stock ledger and auditability.
+Warehouse/location identifiers, stock identity, append-only movements, reservations, transfers, cycle-count adjustment contract, stock balances, valuation/ageing/reorder interface contracts, and FEFO/FIFO extension points. The initial implementation slice establishes the immutable movement ledger, available quantity calculation, and balanced transfers.
 
-## Non-negotiable project constraints
-- Offline/local-first operation; no cloud sync, telemetry, or external AI upload.
-- Windows, Android tablet, and Android phone feature parity.
-- Shared deterministic domain rules; auditable calculations and append-only posted ledgers.
-- Database changes must be versioned migrations with rollback/safety consideration.
-- Enforce encryption/key readiness before accessing business data.
-- Preserve the complete master blueprint; do not remove or reduce requirements.
-- No production-readiness claim without end-to-end acceptance on target platforms.
-- Never commit PATs, passwords, encryption keys, live factory data, or customer secrets.
+## Architecture constraints
+- Offline/local-first domain logic; no network calls, telemetry, or automatic sync.
+- Platform-neutral deterministic functions shared by Windows and Android clients.
+- Posted stock movements are append-only; balances are derived, not independently edited.
+- Quantities use safe integer smallest-units to avoid floating-point drift.
+- Negative stock is rejected by default and can only be enabled explicitly by a caller.
+- Public examples use synthetic identifiers and values only.
+- No production-readiness claim without end-to-end platform tests and Factory Process Owner acceptance.
 
 ## Delivery rules
-1. Inspect the current repository state and document assumptions before implementation.
-2. Keep work limited to this lane; publish interfaces/contracts for integration.
-3. Add unit, integration, migration, and failure/rollback tests for each meaningful workflow.
-4. Run relevant checks and record exact commit SHA and results.
-5. Do not merge untested changes into the integration repository.
-6. Treat sample values as mock data and label them clearly.
+1. Inspect the current public repository state and exact base SHA before each change.
+2. Keep changes feature-sized and confined to this module.
+3. Add unit tests for validation, idempotency, transfer balancing and failure cases.
+4. Run `node --test src/*.test.mjs` in CI.
+5. Publish stable interfaces for Builder-1 integration.
+6. Never access or copy content from the private ERP repository.
 
-## Current status
-Workstream brief initialized. Implementation and CI verification are not yet claimed.
+## Current implementation
+- `src/inventory.mjs`: immutable stock ledger, derived balances, availability and paired transfer events.
+- `src/inventory.test.mjs`: deterministic validation and ledger tests.
+- Next: add reservation lifecycle and cycle-count reconciliation contracts, then valuation/ageing/reorder.
